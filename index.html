@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digimon Sudtamer - Randomizer</title>
     <style>
+        * 
         body {
             font-family: Arial, sans-serif;
             background-color: #0b1116;
@@ -30,13 +31,15 @@
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
-        h1 {
-            color: #ff452b;
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        
+        .logo-titular {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 5px;
         }
+
         p.subtitle {
             color: #ff452b;
             margin: 5px 0 25px 0;
@@ -127,7 +130,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         .legend-text {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
             color: #ffffff;
             margin-bottom: 12px;
@@ -149,43 +152,32 @@
         .soporte-box { margin-top: 8px; }
 
         @media (max-width: 480px) {
-            h1 {
-                font-size: 22px;
-            }
-            .container {
-                padding: 20px 15px;
-            }
-            .main-box {
-                padding: 15px 10px;
-            }
-            .grid-row {
-                gap: 10px;
-            }
-            .btn-lista {
-                width: 90px;
-                font-size: 12px;
-                padding: 8px 5px;
-            }
-            .display-item {
-                font-size: 13px;
-                padding: 8px 10px;
-            }
-            .legend-text {
-                font-size: 15px;
-            }
+            .logo-titular { width: 100px; height: 100px; }
+            .container { padding: 20px 15px; }
+            .main-box { padding: 15px 10px; }
+            .grid-row { gap: 10px; }
+            .btn-lista { width: 90px; font-size: 12px; padding: 8px 5px; }
+            .display-item { font-size: 13px; padding: 8px 10px; }
+            .legend-text { font-size: 15px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Digimon Sudtamer</h1>
-    <p class="subtitle">Dibuja tu propio Digimon</p>
+    <img src="img/logosudtamers.png" alt="Digimon Sudtamer" class="logo-titular">
+    <p class="subtitle">Intenta dibujar tu propio Digimon.</p>
     
     <div class="main-box">
         <div class="top-buttons">
-            <button class="btn-set active" onclick="cambiarSet('digitama', this)">Digitama</button>
-            <button class="btn-set" onclick="cambiarSet('digimon', this)">Digimon</button>
+            <button class="btn-set active" 
+                    onmouseenter="actualizarLeyendaTemporal('digitama_set')" 
+                    onmouseleave="restaurarLeyenda()" 
+                    onclick="cambiarSet('digitama', this)">Digitama</button>
+            <button class="btn-set" 
+                    onmouseenter="actualizarLeyendaTemporal('digimon_set')" 
+                    onmouseleave="restaurarLeyenda()" 
+                    onclick="cambiarSet('digimon', this)">Digimon</button>
         </div>
 
         <div id="gridContenedor">
@@ -209,10 +201,21 @@
 </div>
 
 <script>
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+document.onkeydown = function(e) {
+    if (e.keyCode == 123) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { return false; } 
+    if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { return false; } 
+};
+
+const paletaColoresDigitama = ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Turquesa", "Blanco", "Negro", "Gris", "Marrón", "Magenta", "Celeste", "Rosa", "Ocre", "Crema"];
+
 const bancoDatos = {
     "digitama": {
-        "0": ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Turquesa", "Blanco", "Negro", "Gris", "Marrón", "Magenta", "Celeste", "Rosa", "Ocre", "Crema"],
-
+        "0": paletaColoresDigitama,
         "1": ["Liso", "Militar", "Electricidad", "Anillos horizontales", "Lunares", "Círculos", 
             "Manchas", "Anillos diagonales", "Rayas onduladas", "Atigrado horizontal", "Patrón tipo grietas", 
             "Llamas", "Hojas", "Remaches", "Estrellas", "Espirales", "Triángulos", "Aros", "Ondas", 
@@ -230,10 +233,10 @@ const bancoDatos = {
         "4": ["Nada", "Color más Saturado", "Color menos Saturado", "Resplandor", "Aura color patrón", "Aura Color Base", "Pixel", "Boxels", "wireframe 3D", "Nada",
             "Digitama en eclosión"]
     },
+
     "digimon": {
         "0": ["Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"],
-        
-        "listasMaestras": {
+ "listasMaestras": {
             "Baby": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon",
             "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon",
             "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon",
@@ -413,50 +416,36 @@ const bancoDatos = {
             "War Greymon", "War Greymon (X-Antibody)", "War Greymon: \"G\" Erosion Mode", "Xiangpengmon", "Xros Up Mervamon (Beelzebumon)", "Xuanwumon", "Yihumon",
             "Yukinamon", "Z'd Garurumon", "Zanbamon", "Zeed Millenniumon", "Zeke Greymon", "Zephagamon", "Zhuqiaomon", "Zino Garurumon"]
         },
-        
         "reglas": {
-            "Baby I": {
-                "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"],
-                "5": ["Baby"], "6": ["Baby"], "7": ["Baby"], "8": ["Baby"]
-            },
-            "Baby II": {
-                "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"],
-                "5": ["Baby"], "6": ["Baby"], "7": ["Baby"], "8": ["Baby"]
-            },
-            "Child": {
-                "1": ["Child"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
-                "5": ["Child", "Adult"], "6": ["Child", "Adult"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Child", "Adult"]
-            },
-            "Adult": {
-                "1": ["Adult"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
-                "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"]
-            },
-            "Perfect": {
-                "1": ["Perfect"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
-                "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"]
-            },
-            "Ultimate": {
-                "1": ["Ultimate"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
-                "5": ["Child", "Adult", "Perfect"], "6": ["Perfect","Ultimate"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect","Ultimate"]
-            }
+            "Baby I": { "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"], "5": ["Baby"], "6": ["Baby"], "7": ["Baby", "Child"], "8": ["Baby", "Child"] },
+            "Baby II": {  "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"], "5": ["Baby"], "6": ["Baby"], "7": ["Baby"], "8": ["Baby"] },
+            "Child": { "1": ["Child"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"], "5": ["Child", "Adult"], "6": ["Child", "Adult"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Child", "Adult"] },
+            "Adult": { "1": ["Adult"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"], "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"] },
+            "Perfect": { "1": ["Perfect"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"], "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"] },
+            "Ultimate": { "1": ["Ultimate"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"], "5": ["Child", "Adult", "Perfect"], "6": ["Perfect","Ultimate"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect","Ultimate"] }
         }
     }
 };
 
+// CORREGIDO: Sin espacios extra y adaptado a tus nuevas necesidades visuales
 const etiquetasVisuales = {
-    "digitama": ["Base", "Patrones", "Color patrón", "Extra 1", "Extra 2"], 
-    "digimon": ["Etapa", "Base", "Ojos", "Boca", "Cola", "Extremidades", "Piel", "Colores", "Extra"],
+    "digitama": ["Cáscara", "Patrones", "Color patrón", "Extra 1", "Extra 2"], 
+    "digimon": ["Etapa", "Base", "Cabeza", "Mandibula", "Cola", "Extremidades", "Piel", "Colores", "Extra"],
 };
 
+// CORREGIDO: Claves limpias emparejadas perfectamente con la interfaz
 const descripcionesCategorias = {
+    "digitama_set": "Dibuja el huevo de tu digimon.",
+    "digimon_set": "Dibuja tu monstruo digital.",
+    "Cáscara": "Color general del Digitama",
     "Base": "Cuerpo, vestimenta y forma general.",
     "Patrones": "Diseños o marcas de textura sobre la superficie.",
     "Color patrón": "Colores del patrón.",
     "Extra 1": "Detalles extras a agregar.",
     "Extra 2": "Detalles extras a para que sufras.",
     "Etapa": "Estadio evolutivo.",
-    "Ojos": "Forma de los ojos y mirada.",
-    "Boca": "Forma general de la nariz, hocico y/o mandíbula.",
+    "Cabeza": "Forma del craneo, orejas, ojos y tal vez accesorios",
+    "Mandibula": "Forma general de la nariz, hocico, boca y/o pinzas (si es que tiene).",
     "Cola": "Protuberancia, turbina, cola, hélice o lo que toque.",
     "Extremidades": "Brazos, piernas, patas, alas, tentáculos, ¿Ruedas?",
     "Piel": "Textura (metálico, con pelaje, escamas, placas, etc.).",
@@ -466,6 +455,8 @@ const descripcionesCategorias = {
 
 let setActual = "digitama";
 let etapaDigimon = "Child"; 
+
+let textoLeyendaFijo = "Selecciona una categoría por vez";
 
 function inicializarInterfaz() {
     const contenedor = document.getElementById("gridContenedor");
@@ -483,9 +474,24 @@ function inicializarInterfaz() {
         boton.className = "btn-lista";
         boton.innerText = nombreCategoria;
         
+        boton.onmouseenter = () => {
+            actualizarLeyendaTemporal(nombreCategoria);
+        };
+
+        boton.onmouseleave = () => {
+            restaurarLeyenda();
+        };
+
         boton.onclick = () => {
             generarEspecifico(i.toString());
-            actualizarLeyenda(nombreCategoria);
+            
+            if (descripcionesCategorias[nombreCategoria]) {
+                textoLeyendaFijo = descripcionesCategorias[nombreCategoria];
+            } else {
+                textoLeyendaFijo = `${nombreCategoria}: Descripción de categoría en desarrollo.`;
+            }
+            
+            document.getElementById("leyendaCategoria").innerText = textoLeyendaFijo;
         };
 
         const visor = document.createElement("div");
@@ -499,7 +505,7 @@ function inicializarInterfaz() {
     }
 }
 
-function actualizarLeyenda(categoria) {
+function actualizarLeyendaTemporal(categoria) {
     const contenedorLeyenda = document.getElementById("leyendaCategoria");
     if (descripcionesCategorias[categoria]) {
         contenedorLeyenda.innerText = descripcionesCategorias[categoria];
@@ -508,16 +514,26 @@ function actualizarLeyenda(categoria) {
     }
 }
 
+function restaurarLeyenda() {
+    document.getElementById("leyendaCategoria").innerText = textoLeyendaFijo;
+}
+
 function cambiarSet(nuevoSet, elementoBoton) {
     setActual = nuevoSet;
-    
     if(setActual === "digimon") etapaDigimon = "Child"; 
     
     const botones = document.querySelectorAll('.btn-set');
     botones.forEach(btn => btn.classList.remove('active'));
     elementoBoton.classList.add('active');
     
-    document.getElementById("leyendaCategoria").innerText = "Selecciona una categoría por vez";
+    const claveSet = `${nuevoSet}_set`;
+    if (descripcionesCategorias[claveSet]) {
+        textoLeyendaFijo = descripcionesCategorias[claveSet];
+    } else {
+        textoLeyendaFijo = `Modo ${nuevoSet.toUpperCase()}: Pasa el mouse por una categoría`;
+    }
+    
+    document.getElementById("leyendaCategoria").innerText = textoLeyendaFijo;
     
     inicializarInterfaz();
 }
@@ -528,12 +544,9 @@ function generarEspecifico(indice) {
     
     if (setActual === "digimon" && indice !== "0") {
         const etapasRequeridas = bancoDatos["digimon"]["reglas"][etapaDigimon][indice];
-        
         etapasRequeridas.forEach(etapaRef => {
             const poolEspecifico = bancoDatos["digimon"]["listasMaestras"][etapaRef];
-            if (poolEspecifico) {
-                opcionesDisponibles = opcionesDisponibles.concat(poolEspecifico);
-            }
+            if (poolEspecifico) opcionesDisponibles = opcionesDisponibles.concat(poolEspecifico);
         });
     } else {
         opcionesDisponibles = bancoDatos[setActual][indice];
@@ -547,7 +560,6 @@ function generarEspecifico(indice) {
         
         if (setActual === "digimon" && indice === "0") {
             etapaDigimon = eleccion;
-            
             for (let j = 1; j < etiquetasVisuales["digimon"].length; j++) {
                 const otroVisor = document.getElementById(`visor-${j}`);
                 if (otroVisor) {
@@ -564,6 +576,5 @@ function generarEspecifico(indice) {
 
 inicializarInterfaz();
 </script>
-
 </body>
 </html>
