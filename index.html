@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digimon Sudtamer - Randomizer</title>
     <style>
         body {
@@ -15,13 +16,17 @@
             min-height: 100vh;
             margin: 0;
             gap: 20px;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .container {
             background-color: #152228;
             padding: 30px;
             border-radius: 12px;
             border: 1px solid #ff452b;
-            width: 520px;
+            width: 100%;
+            max-width: 520px;
+            box-sizing: border-box;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
@@ -49,6 +54,7 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 25px;
+            flex-wrap: wrap; 
         }
         .btn-set {
             background-color: #ff452b;
@@ -103,6 +109,7 @@
             border: 1px solid #23333c;
             min-height: 18px;
             transition: color 0.3s;
+            word-break: break-word; 
         }
         .display-item.nuevo {
             color: #ffffff;
@@ -112,13 +119,15 @@
             background-color: #0d161b;
             border: 1px solid #ff452b;
             border-radius: 12px;
-            width: 540px;
+            width: 100%;
+            max-width: 540px;
+            box-sizing: border-box;
             padding: 20px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         .legend-text {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             color: #ffffff;
             margin-bottom: 12px;
@@ -136,11 +145,34 @@
         .link-reddit { color: #ff4500; }
         .link-facebook { color: #1877f2; }
         .link-x { color: #1da1f2; }
-        
         .link-soporte { color: #ff6b54; }
-        
-        .soporte-box {
-            margin-top: 8px;
+        .soporte-box { margin-top: 8px; }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 22px;
+            }
+            .container {
+                padding: 20px 15px;
+            }
+            .main-box {
+                padding: 15px 10px;
+            }
+            .grid-row {
+                gap: 10px;
+            }
+            .btn-lista {
+                width: 90px;
+                font-size: 12px;
+                padding: 8px 5px;
+            }
+            .display-item {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+            .legend-text {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -148,13 +180,12 @@
 
 <div class="container">
     <h1>Digimon Sudtamer</h1>
-    <p class="subtitle">Randomiza una categoria por vez.</p>
+    <p class="subtitle">Dibuja tu propio Digimon</p>
     
     <div class="main-box">
         <div class="top-buttons">
-            <button class="btn-set active" onclick="cambiarSet('tama', this)">Tama</button>
-            <button class="btn-set" onclick="cambiarSet('baby', this)">Baby</button>
-            <button class="btn-set" onclick="cambiarSet('digis', this)">Digis</button>
+            <button class="btn-set active" onclick="cambiarSet('digitama', this)">Digitama</button>
+            <button class="btn-set" onclick="cambiarSet('digimon', this)">Digimon</button>
         </div>
 
         <div id="gridContenedor">
@@ -163,7 +194,7 @@
 </div>
 
 <div class="info-box">
-    <div id="leyendaCategoria" class="legend-text">Selecciona una categoría para ver su descripción</div>
+    <div id="leyendaCategoria" class="legend-text">Selecciona una categoría por vez</div>
     <div class="social-links">
         <div>
             Comparti tu digimon en 
@@ -179,37 +210,41 @@
 
 <script>
 const bancoDatos = {
-    "tama": {
-        "0": ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Bermellón", "Ámbar", "Lima", "Turquesa", "Añil", "Blanco", "Negro", "Gris", "Marrón", "Magenta"],
-        "1": [
-            "Liso", "Militar", "Electricidad", "Anillos horizontales", "Lunares", "Círculos", 
-            "Manchas", "Anillos diagonales", "Rayas onduladas", "Atigrado horizontal", "Grietas", 
+    "digitama": {
+        "0": ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Turquesa", "Blanco", "Negro", "Gris", "Marrón", "Magenta", "Celeste", "Rosa", "Ocre", "Crema"],
+
+        "1": ["Liso", "Militar", "Electricidad", "Anillos horizontales", "Lunares", "Círculos", 
+            "Manchas", "Anillos diagonales", "Rayas onduladas", "Atigrado horizontal", "Patrón tipo grietas", 
             "Llamas", "Hojas", "Remaches", "Estrellas", "Espirales", "Triángulos", "Aros", "Ondas", 
             "Flores", "Atigrado diagonal", "Manchas leopardo", "Ondulaciones", "Escamas", 
-            "Símbolo Murciélago", "Símbolo Digital Hazard", "Símbolo Zero Unit", "Símbolo coraje", 
+            "Símbolo Murciélago (ejemplo: Devimon)", "Símbolo Digital Hazard (Ejemplo: Megidramon)", "Símbolo Zero Unit (Ejemplo: Culumon)", "Símbolo coraje", 
             "Símbolo Amistad", "Símbolo esperanza", "Símbolo bondad", "Símbolo conocimiento", 
-            "Símbolo luz", "Circuito", "Símbolo Mamífero", "Cruz de ángel", "Símbolo amor", 
+            "Símbolo luz", "Circuito", "Símbolo Bestia (Ejemplo: Armadillomon)", "Símbolo amor", 
             "Símbolo pureza", "Símbolo sinceridad", "Símbolo Milagros", "Símbolo Bondad", "Símbolo Destino"],
-        "2": ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Bermellón", "Ámbar", "Lima", "Turquesa", "Añil", "Blanco", "Negro", "Gris", "Marrón", "Magenta"],
-        "3": ["Espinas", "Escamas", "Placa Hexagonos", "Nada", "Cuernos", "Nada", "Sombra interna", "Nada", "Alas ángel", "Alas demonio", "Holy ring", "Digicode", "Nada", "Alas Dragón"],
-        "4": ["Nada", "Color más Saturado", "Color menos Saturado", "Resplandor", "Aura color patrón", "Aura Color Base", "Pixel", "Boxels", "wireframe 3D", "Nada", "Digitama en eclosión"]
+
+        "2": ["Rojo", "Amarillo", "Azul", "Naranja", "Verde", "Violeta", "Turquesa", "Blanco", "Negro", "Gris", "Marrón", "Magenta", "Celeste", "Rosa", "Ocre", "Crema"],
+
+        "3": ["Espinas", "Escamas", "Placa Hexagonos", "Nada", "Cuernos", "Nada", "Sombra interna", "Nada", "Alas ángel", "Alas demonio", "Holy ring", "Digicode",
+            "Nada","Alas Dragón"],
+
+        "4": ["Nada", "Color más Saturado", "Color menos Saturado", "Resplandor", "Aura color patrón", "Aura Color Base", "Pixel", "Boxels", "wireframe 3D", "Nada",
+            "Digitama en eclosión"]
     },
-    "baby": {
-        "0": ["Baby I", "Baby II"],
-        "1": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "2": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "3": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "4": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "5": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "6": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "7": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
-        "8": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon", "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon", "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon", "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon", "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon", "Chocomon", "Culumon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon", "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon", "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon", "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon", "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"]
-    },
-    "digis": {
-        "0": ["Child", "Adult", "Perfect", "Ultimate"],
+    "digimon": {
+        "0": ["Baby I", "Baby II", "Child", "Adult", "Perfect", "Ultimate"],
         
-        // Estructura aplanada: Se define la lista de especies una sola vez.
         "listasMaestras": {
+            "Baby": ["Algomon (Baby I)", "Bombmon", "Bommon", "Botamon", "Bubbmon", "Chibickmon", "Chicomon", "Choromon", "Cocomon", "Cotsucomon", "Curimon", "Dodomon",
+            "Dokimon", "Fufumon", "Fukamon", "Fusamon", "Fuukashita Medal", "Jyarimon", "Keemon", "Kekomon", "Ketomon", "Kuramon", "Leafmon", "Mokumon", "Nyokimon",
+            "Pafumon", "Paomon", "Peti Meramon", "Petitmon", "Pipimon", "Pitchmon", "Popomon", "Poyomon", "Punimon", "Pupumon", "Pururumon", "Pusumon", "Puttimon",
+            "Puwamon", "Puyomon", "Pyonmon", "Relemon", "Sakumon", "Sunamon", "Tomorimon", "Torikara Ballmon", "Tsubumon", "Yolkmon", "Yukimi Botamon", "Yuramon", "Zerimon",
+            "Zurumon", "Algomon (Baby II)", "Arkadimon Baby", "Babydmon", "Bibimon", "Bosamon", "Bowmon", "Budmon", "Caprimon", "Chapmon", "Chibimon", "Chicchimon",
+            "Chocomon", "Cupimon", "Dorimon", "Fluffymon", "Frimon", "Gaossmon", "Gigimon", "Goromon", "Gummymon", "Gurimon", "Hiyarimon", "Hopmon", "Kakkinmon",
+            "Kekkomon", "Kodokugumon Baby", "Koromon", "Kozenimon", "Kyaromon", "Kyokyomon", "Medal", "Meicoomon's Unnamed Baby Form", "Minomon", "Missimon", "Mochimon",
+            "Mococomon", "Monimon", "Moonmon", "Negamon", "Nyaromon", "Onibimon", "Otamamon", "Pagumon", "Peti Meramon", "Pickmon", "Pinamon", "Pokomon", "Poromon",
+            "Pukamon", "Puroromon", "Pusurimon", "Puyoyomon", "Pyocomon", "Sakuttomon", "Sunmon", "Tanemon", "Tokomon", "Tokomon (X-Antibody)", "Torikara Ballmon",
+            "Tsumemon", "Tunomon", "Upamon", "Vitium Baby", "Wanyamon", "Xiaomon", "Yarmon"],
+
             "Child": ["Agnimon", "Agumon", "Agumon (2006)", "Agumon (Black)", "Agumon (Black) (2006)", "Agumon (Black) (X-Antibody)", "Agumon (X-Antibody)", "Agumon Hakase",
                       "Agumon: Burst Mode", "Algomon (Child)", "Allomon", "Alraumon", "Angoramon", "Arkadimon Child", "Armadimon", "Bacomon", "Bakumon", "Bearmon", "BEMmon",
                       "Betamon", "Betamon (X-Antibody)", "Black Guilmon", "Black Tailmon", "Blucomon", "Bokomon", "Bun", "Burgamon", "Bushi Agumon", "Candmon", "Cardmon C1",
@@ -236,78 +271,82 @@ const bancoDatos = {
 
             "Adult": ["Aegiomon", "Airdramon", "Akatorimon", "Algomon (Adult)", "Allomon", "Allomon (X-Antibody)", "Angemon", "Ankylomon", "Aquilamon", "Arbormon", "Archelomon",
                       "Arkadimon Adult", "Arma Lizamon", "Arresterdramon", "Atamadekachimon", "Baboongamon", "Bakemon", "Ballistamon", "Baluchimon", "Bao Hackmon", "Baromon",
-                      "Battle Armament Trailmon", "Betel Gammamon", "Bio Coatlmon", "Bio Stegomon", "Bio Thunderbirmon", "Birdramon", "Bitmon", "Black Galgomon", "Black Gaogamon",
-                      "Black Growmon", "Black Tailmon", "Black Tailmon Uver.", "Blade Kuwagamon", "Blimpmon", "Blitzmon", "Blue Meramon", "Boarmon", "Bomber Nanimon", "Boogiemon", "Bulkmon",
-                      "Bullmon", "Buraimon", "Burgamon Adult", "Butterflamon", "Cardmon U1", "Cardmon U2", "Centalmon", "Chackmon", "Chamblemon", "Chamelemon", "Chrysalimon", "Citramon",
-                      "Clockmon", "Coatlmon", "Cockatrimon", "Coelamon", "Coredramon (Blue)", "Coredramon (Green)", "Cougarmon", "Cyclomon", "Damemon", "Darcmon", "Dark Knightmon",
-                      "Dark Lizamon", "Dark Maildramon", "Dark Tyranomon", "Dark Tyranomon (X-Antibody)", "Deadly Axemon", "Death-X-DORUgamon", "Deckerdramon", "Deltamon", "Depthmon",
-                      "Devidramon", "Devimon", "Diatrymon", "Digmon", "Dimetromon", "Dinohumon", "Dobermon", "Dobermon (X-Antibody)", "Dogmon", "Dokugumon", "Don Shoutmon", "DORUgamon",
-                      "Dorulumon", "Drimogemon", "Duskmon", "Earthdramon", "Ebidramon", "Elephamon", "Eosmon (Adult)", "Evilmon", "Exermon", "Eyesmon", "Eyesmon: Scatter Mode", "Fairimon",
-                      "Fangmon", "Filmon", "Firamon", "Fla Wizarmon", "Fladramon", "Flare Lizamon", "Flybeemon", "Flymon", "Forgebeemon", "Frogmon", "Fugamon", "Galemon", "Galgomon", "Ganemon",
-                      "Gaogamon", "Gargomon", "Garummon", "Garurumon", "Garurumon (Black)", "Garurumon (X-Antibody)", "Gawappamon", "Gekomon", "Geo Greymon", "Geremon", "Gesomon",
-                      "Gesomon (X-Antibody)", "Gigantic Numemon", "Ginkakumon", "Ginkakumon Promote", "Ginryumon", "Gizmon: AT", "Gladimon", "Goatmon", "Gokimon", "Gold Numemon",
-                      "Gold V-dramon", "Golemon", "Golemon (PS)", "Gorimon", "Gottsumon", "Great King Scumon", "Greymon", "Greymon (2010 Anime Version)", "Greymon (Blue)",
-                      "Greymon (Blue) (X-Antibody)", "Greymon (X-Antibody)", "Grimmon", "Grottemon", "Growmon", "Growmon (Orange)", "Growmon (X-Antibody)", "Gryzmon", "Guardromon",
-                      "Guardromon (Gold)", "Gulus Gammamon", "Gururumon", "Hakubamon", "Hanumon", "Harpymon", "Heshouwushou", "Hi-Commandramon", "Hi-Vision Monitamon", "Holsmon", "Honeybeemon",
-                      "Hookmon", "Hover Espimon", "Hudiemon", "Hyougamon", "Ice Devimon", "Icemon", "Igamon", "Ikkakumon", "Jazardmon", "Jungle Mojyamon", "Kabukimon", "Kabuterimon",
-                      "Kangarumon", "Karatuki Numemon", "Kaus Gammamon", "Kenkimon", "Kenzoku 10th Rank", "Kenzoku 1st Rank", "Kenzoku 3rd Rank", "Kinkakumon", "Kiwimon",
-                      "Knight Chessmon (Black)", "Knight Chessmon (White)", "Kokeshimon", "Komondomon", "Kongoumon", "Kougamon", "Kuwagamon", "Kuwagamon (X-Antibody)", "Kyubimon",
-                      "Kyubimon (Silver)", "Landramon", "Lavorvomon", "Lekismon", "Leomon", "Leomon (X-Antibody)", "Liamon", "Lianpumon", "Lighdramon", "Liskmon", "Loogarmon", "Lucemon",
-                      "Lynxmon", "Löwemon", "Machmon", "Mad Leomon", "Mad Leomon: Armed Mode", "Magnamon", "Magnamon (X-Antibody)", "Mail Birdramon", "Maildramon", "Manbomon", "Manekimon",
-                      "Mantaraymon", "Mantaraymon (X-Antibody)", "Marin Devimon", "Master V-dramon", "Mechanorimon", "Meicoomon", "Meramon", "Meramon (X-Antibody)", "Mercuremon", "Metabee",
-                      "Mikemon", "Mimicmon", "Minotaurmon", "Mojyamon", "Monitamon", "Monochromon", "Monochromon (X-Antibody)", "Moosemon", "Mori Shellmon", "Mothmon", "Mulemon",
-                      "Musyamon", "Namakemon", "Nanimon", "Nefertimon", "Nefertimon (X-Antibody)", "Night Chiropmon", "Nise Drimogemon", "Nohemon", "Numemon", "Numemon (X-Antibody)",
-                      "Octmon", "Omega Shoutmon", "Omekamon", "Opossummon", "Orcamon", "Orgemon", "Orgemon (X-Antibody)", "Owlmon", "Paledramon", "Panjyamon", "Parasaurmon", "Peacockmon",
-                       "Peckmon", "Pegasmon", "Pegasmon (X-Antibody)", "Petermon", "Pidmon", "Pipismon", "Platinum Scumon", "Ponchomon", "Porcupamon", "Potamon", "Prairiemon", "Pteranomon", 
-                       "Pteranomon (X-Antibody)", "Publimon", "Pucchiemon", "Pucchiemon (Green)", "Punkmon", "Ranamon", "Rapidmon Armor", "Raptor Sparrowmon", "Raptordramon", "Raremon",
-                       "Red V-dramon", "Red Vegimon", "Reppamon", "Revolmon", "Rhamphomon", "Rhinomon", "Rhinomon (X-Antibody)", "Rinkmon", "Rokusho", "Rukamon", "Runnermon", "Saberdramon",
-                       "Sagittarimon", "Salamandamon", "Sand Yanmamon", "Sangloupmon", "Scumon", "Seadramon", "Seadramon (X-Antibody)", "Seahomon", "Sealsdramon", "Searchmon", "Sepikmon",
-                       "Sethmon", "Shademon", "Shademon (Haruko Ver.)", "Shademon (Nene Ver.)", "Shadramon", "Sheepmon", "Shellmon", "Shima Unimon", "Shoeshoemon", "Shonitamon",
-                       "Shooting Starmon", "Shortmon", "Shoutmon (King Ver.)", "Shoutmon X2", "Shoutmon X3", "Shoutmon X4", "Shurimon", "Siesamon", "Siesamon (X-Antibody)", "Sistermon Ciel",
+                      "Battle Armament Trailmon", "Betel Gammamon", "Bio Coatlmon", "Bio Stegomon", "Bio Thunderbirmon", "Birdramon", "Bitmon", "Black Galgomon",
+                      "Black Gaogamon", "Black Growmon", "Black Tailmon", "Black Tailmon Uver.", "Blade Kuwagamon", "Blimpmon", "Blitzmon", "Blue Meramon", "Boarmon",
+                      "Bomber Nanimon", "Boogiemon", "Bulkmon", "Bullmon", "Buraimon", "Burgamon Adult", "Butterflamon", "Cardmon U1", "Cardmon U2", "Centalmon", "Chackmon",
+                      "Chamblemon", "Chamelemon", "Chrysalimon", "Citramon", "Clockmon", "Coatlmon", "Cockatrimon", "Coelamon", "Coredramon (Blue)", "Coredramon (Green)",
+                      "Cougarmon", "Cyclomon", "Damemon", "Darcmon", "Dark Knightmon", "Dark Lizamon", "Dark Maildramon", "Dark Tyranomon", "Dark Tyranomon (X-Antibody)",
+                      "Deadly Axemon", "Death-X-DORUgamon", "Deckerdramon", "Deltamon", "Depthmon", "Devidramon", "Devimon", "Diatrymon", "Digmon", "Dimetromon", "Dinohumon",
+                      "Dobermon", "Dobermon (X-Antibody)", "Dogmon", "Dokugumon", "Don Shoutmon", "DORUgamon", "Dorulumon", "Drimogemon", "Duskmon", "Earthdramon", "Ebidramon",
+                      "Elephamon", "Eosmon (Adult)", "Evilmon", "Exermon", "Eyesmon", "Eyesmon: Scatter Mode", "Fairimon", "Fangmon", "Filmon", "Firamon", "Fla Wizarmon",
+                      "Fladramon", "Flare Lizamon", "Flybeemon", "Flymon", "Forgebeemon", "Frogmon", "Fugamon", "Galemon", "Galgomon", "Ganemon", "Gaogamon", "Gargomon",
+                      "Garummon", "Garurumon", "Garurumon (Black)", "Garurumon (X-Antibody)", "Gawappamon", "Gekomon", "Geo Greymon", "Geremon", "Gesomon", "Gesomon (X-Antibody)",
+                      "Gigantic Numemon", "Ginkakumon", "Ginkakumon Promote", "Ginryumon", "Gizmon: AT", "Gladimon", "Goatmon", "Gokimon", "Gold Numemon", "Gold V-dramon",
+                      "Golemon", "Golemon (PS)", "Gorimon", "Gottsumon", "Great King Scumon", "Greymon", "Greymon (2010)", "Greymon (Blue)", 
+                      "Greymon (Blue) (X-Antibody)", "Greymon (X-Antibody)", "Grimmon", "Grottemon", "Growmon", "Growmon (Orange)", "Growmon (X-Antibody)", "Gryzmon",
+                      "Guardromon", "Guardromon (Gold)", "Gulus Gammamon", "Gururumon", "Hakubamon", "Hanumon", "Harpymon", "Heshouwushou", "Hi-Commandramon",
+                      "Hi-Vision Monitamon", "Holsmon", "Honeybeemon", "Hookmon", "Hover Espimon", "Hudiemon", "Hyougamon", "Ice Devimon", "Icemon", "Igamon", "Ikkakumon",
+                      "Jazardmon", "Jungle Mojyamon", "Kabukimon", "Kabuterimon", "Kangarumon", "Karatuki Numemon", "Kaus Gammamon", "Kenkimon", "Kenzoku 10th Rank",
+                      "Kenzoku 1st Rank", "Kenzoku 3rd Rank", "Kinkakumon", "Kiwimon", "Knight Chessmon (Black)", "Knight Chessmon (White)", "Kokeshimon", "Komondomon",
+                      "Kongoumon", "Kougamon", "Kuwagamon", "Kuwagamon (X-Antibody)", "Kyubimon", "Kyubimon (Silver)", "Landramon", "Lavorvomon", "Lekismon", "Leomon",
+                      "Leomon (X-Antibody)", "Liamon", "Lianpumon", "Lighdramon", "Liskmon", "Loogarmon", "Lucemon", "Lynxmon", "Löwemon", "Machmon", "Mad Leomon",
+                      "Mad Leomon: Armed Mode", "Magnamon", "Magnamon (X-Antibody)", "Mail Birdramon", "Maildramon", "Manbomon", "Manekimon", "Mantaraymon",
+                      "Mantaraymon (X-Antibody)", "Marin Devimon", "Master V-dramon", "Mechanorimon", "Meicoomon", "Meramon", "Meramon (X-Antibody)", "Mercuremon",
+                      "Mikemon", "Mimicmon", "Minotaurmon", "Mojyamon", "Monitamon", "Monochromon", "Monochromon (X-Antibody)", "Moosemon", "Mori Shellmon", "Mothmon",
+                      "Mulemon", "Musyamon", "Namakemon", "Nanimon", "Nefertimon", "Nefertimon (X-Antibody)", "Night Chiropmon", "Nise Drimogemon", "Nohemon", "Numemon",
+                      "Numemon (X-Antibody)", "Octmon", "Omega Shoutmon", "Omekamon", "Opossummon", "Orcamon", "Orgemon", "Orgemon (X-Antibody)", "Owlmon", "Paledramon",
+                      "Panjyamon", "Parasaurmon", "Peacockmon", "Peckmon", "Pegasmon", "Pegasmon (X-Antibody)", "Petermon", "Pidmon", "Pipismon", "Platinum Scumon", 
+                      "Ponchomon", "Porcupamon", "Potamon", "Prairiemon", "Pteranomon", "Pteranomon (X-Antibody)", "Publimon", "Pucchiemon", "Pucchiemon (Green)", "Punkmon",
+                      "Ranamon", "Rapidmon Armor", "Raptor Sparrowmon", "Raptordramon", "Raremon", "Red V-dramon", "Red Vegimon", "Reppamon", "Revolmon", "Rhamphomon",
+                      "Rhinomon", "Rhinomon (X-Antibody)", "Rinkmon", "Rokusho", "Rukamon", "Runnermon", "Saberdramon", "Sagittarimon", "Salamandamon", "Sand Yanmamon",
+                      "Sangloupmon", "Scumon", "Seadramon", "Seadramon (X-Antibody)", "Seahomon", "Sealsdramon", "Searchmon", "Sepikmon", "Sethmon", "Shademon",
+                      "Shademon (Haruko Ver.)", "Shademon (Nene Ver.)", "Shadramon", "Sheepmon", "Shellmon", "Shima Unimon", "Shoeshoemon", "Shonitamon", "Shooting Starmon",
+                      "Shortmon", "Shoutmon (King Ver.)", "Shoutmon X2", "Shoutmon X3", "Shoutmon X4", "Shurimon", "Siesamon", "Siesamon (X-Antibody)", "Sistermon Ciel",
                        "Sistermon Ciel (Awake)", "Sistermon Noir", "Sistermon Noir (Awake)", "Skull Knightmon", "Skull Knightmon: Arrow Mode", "Skull Knightmon: Big Axe Mode",
-                       "Skull Knightmon: Cavalier Mode", "Skull Knightmon: Naginata Mode", "Snatchmon", "Snimon", "Sorcerimon", "Soulmon", "Starmon", "Starmon (X-Antibody)", "Stegomon",
-                       "Stingmon", "Stingmon (Black)", "Strikedramon", "Submarimon", "Sunflowmon", "Swanmon", "Symbare Angoramon", "Tailmon", "Tailmon (X-Antibody)", "Tankmon", "Targetmon",
-                       "Tekkamon", "Tenkomon", "Tesla Jellymon", "Thunderballmon", "Thunderballmon (X-Antibody)", "Thunderbirmon", "Tia Ludomon", "Tobiumon", "Tobucatmon", "Tocanmon",
-                       "Togemogumon", "Togemon", "Togemon (X-Antibody)", "Tortamon", "Trailmon", "Trailmon Angler", "Trailmon Ball", "Trailmon Buffalo", "Trailmon C-89", "Trailmon Franken",
-                       "Trailmon Kettle", "Trailmon Mole", "Trailmon of Darkness", "Trailmon Raccoon Dog", "Trailmon Worm", "Troopmon", "Tuchidarumon", "Turbomon", "Turuiemon", "Tuskmon",
-                       "Tuwarmon", "Tylomon", "Tylomon (X-Antibody)", "Tyranomon", "Tyranomon (X-Antibody)", "Tyumon", "Unimon", "V-dramon", "V-dramon (Black)", "Vegimon", "Velgrmon",
-                       "Vermillimon", "Vitium Adult", "Vritramon", "Waspmon", "Wendimon", "Wezen Gammamon", "Whamon", "Witchmon", "Wizarmon", "Wizarmon (X-Antibody)", "Wolfmon",
-                       "Wolvermon", "Woodmon", "Xiquemon", "XV-mon", "XV-mon (Black)", "Yakiimon", "Yaksamon", "Yanmamon", "Yo!Yo!mon", "Youkomon", "Yukidarumon", "Zassoumon",
-                       "Zeke Greymon", "Zubaeagermon", "Shoutmon (Blue)", "Shoutmon Star Sword", "Shoutmon Black", "Shoutmon EX6", "Shoutmon SH", "Shoutmon X2", "Shoutmon X2 Plus M"],
+                       "Skull Knightmon: Cavalier Mode", "Skull Knightmon: Naginata Mode", "Snatchmon", "Snimon", "Sorcerimon", "Soulmon", "Starmon", "Starmon (X-Antibody)",
+                       "Stegomon", "Stingmon", "Stingmon (Black)", "Strikedramon", "Submarimon", "Sunflowmon", "Swanmon", "Symbare Angoramon", "Tailmon", "Tailmon (X-Antibody)",
+                       "Tankmon", "Targetmon", "Tekkamon", "Tenkomon", "Tesla Jellymon", "Thunderballmon", "Thunderballmon (X-Antibody)", "Thunderbirmon", "Tia Ludomon",
+                       "Tobiumon", "Tobucatmon", "Tocanmon", "Togemogumon", "Togemon", "Togemon (X-Antibody)", "Tortamon", "Trailmon", "Trailmon Angler", "Trailmon Ball",
+                       "Trailmon Buffalo", "Trailmon C-89", "Trailmon Franken", "Trailmon Kettle", "Trailmon Mole", "Trailmon of Darkness", "Trailmon Raccoon Dog",
+                       "Trailmon Worm", "Troopmon", "Tuchidarumon", "Turbomon", "Turuiemon", "Tuskmon", "Tuwarmon", "Tylomon", "Tylomon (X-Antibody)", "Tyranomon",
+                       "Tyranomon (X-Antibody)", "Tyumon", "Unimon", "V-dramon", "V-dramon (Black)", "Vegimon", "Velgrmon", "Vermillimon", "Vitium Adult", "Vritramon",
+                       "Waspmon", "Wendimon", "Wezen Gammamon", "Whamon", "Witchmon", "Wizarmon", "Wizarmon (X-Antibody)", "Wolfmon", "Wolvermon", "Woodmon", "Xiquemon",
+                       "XV-mon", "XV-mon (Black)", "Yakiimon", "Yaksamon", "Yanmamon", "Yo!Yo!mon", "Youkomon", "Yukidarumon", "Zassoumon", "Zeke Greymon", "Zubaeagermon",
+                       "Shoutmon (Blue)", "Shoutmon Star Sword", "Shoutmon Black", "Shoutmon EX6", "Shoutmon SH", "Shoutmon X2", "Shoutmon X2 Plus M"],
 
             "Perfect": ["Aegiochusmon", "Aegiochusmon: Blue", "Aegiochusmon: Dark", "Aegiochusmon: Green", "Aegiochusmon: Holy", "Aero V-dramon", "Agnimon", "Ajatarmon",
                         "Aldamon", "Algomon (Perfect)", "Allomon", "Andiramon", "Andiramon (Deva)", "Andromon", "Angewomon", "Angewomon (X-Antibody)", "Anomalocarimon",
                         "Anomalocarimon (X-Antibody)", "Archnemon", "Arkadimon Perfect", "Arkhai Angemon", "Armamon", "Arresterdramon: Superior Mode (Brave Snatcher)",
                         "Assaultmon", "Astamon", "Asuramon", "Atlur Ballistamon", "Atlur Kabuterimon (Blue)", "Atlur Kabuterimon (Red)", "Azhdarmon", "Baalmon",
-                        "Baalmon (X-Antibody)", "Bastemon", "Beowolfmon", "Betsumon", "Big Mamemon", "Bishop Chessmon (Black)", "Bishop Chessmon (White)", "Black King Numemon",
-                        "Black Mach Gaogamon", "Black Megalo Growmon", "Black Rapidmon", "Blikmon", "Blizzarmon", "Blossomon", "Blue Meramon", "Bolgmon", "Bombermon",
-                        "Boutmon", "Brachimon", "Butenmon", "Butterflamon", "Calamaramon", "Cannonbeemon", "Cannonbeemon (Aircraft Carrier)", "Canoweissmon",
-                        "Captain Hookmon", "Cardmon R1", "Cardmon R2", "Cargodramon", "Catch Mamemon", "Caturamon", "Cerberumon", "Cerberumon (X-Antibody)",
+                        "Baalmon (X-Antibody)", "Bastemon", "Beowolfmon", "Betsumon", "Big Mamemon", "Bishop Chessmon (Black)", "Bishop Chessmon (White)",
+                        "Black King Numemon", "Black Mach Gaogamon", "Black Megalo Growmon", "Black Rapidmon", "Blikmon", "Blizzarmon", "Blossomon", "Blue Meramon",
+                        "Bolgmon", "Bombermon", "Boutmon", "Brachimon", "Butenmon", "Butterflamon", "Calamaramon", "Cannonbeemon", "Cannonbeemon (Aircraft Carrier)",
+                        "Canoweissmon", "Captain Hookmon", "Cardmon R1", "Cardmon R2", "Cargodramon", "Catch Mamemon", "Caturamon", "Cerberumon", "Cerberumon (X-Antibody)",
                       "Cerberumon: Werewolf Mode", "Chaos Grimmon", "Chaperomon", "Chimairamon", "Cho Hakkaimon", "Climbmon", "Crescemon", "Crys Paledramon", "Cyberdramon",
                       "Cyberdramon (2010)", "Cyberdramon (X-Antibody)", "Dagomon", "Daipenmon", "Dark Knightmon", "Dark Superstarmon", "Darumamon", "Death Meramon",
                       "Death-X-DORUguremon", "Decker Greymon", "Delumon", "Destromon", "Diablomon", "Digitamamon", "Dinobeemon", "Divemon", "DORUguremon", "Doumon", "Duramon",
                       "Ebidramon", "Enbarrmon", "Entmon", "Eosmon (Perfect)", "Etemon", "Ex-Tyranomon", "Fantomon", "Fladramon", "Flaremon", "Footmon", "Frozomon", "Fumamon",
-                      "Garudamon", "Garudamon (X-Antibody)", "Garummon", "Generamon", "Gerbemon", "Ghilliedhumon", "Gigadramon", "Gigasmon", "Giromon", "Gizmon: XT", "Gogmamon", "Gokuwmon", "Gold V-dramon", "Grademon", "Grademon (Vice)",
-                      "Gran Kuwagamon", "Grand Galemon", "Grappu Leomon", "Gravimon", "Great Gryzmon", "Great King Scumon", "Groundramon", "Gusokumon", "Gyukimon",
-                      "Hangyomon", "Helloogarmon", "Herakle Kabuterimon", "Hippogriffomon", "Hisyaryumon", "Holy Angemon", "Holy Angemon: Priest Mode", "Holydramon",
-                      "Hououmon", "Huankunmon", "Imperialdramon: Dragon Mode", "Indaramon", "Infermon", "Insekimon", "Jazarichmon", "Jet Silphymon", "Jewelbeemon", "Jijimon",
-                      "Jokermon", "Jyagamon", "Jyureimon", "Kabukimon", "Kaiser Leomon", "Karakurumon", "Karatenmon", "Kenkimon", "Kenzoku 10th Rank", "Knightmon", 
-                      "Kongoumon", "Kumbhiramon", "Kyukimon", "Lady Devimon", "Lady Devimon (X-Antibody)", "Lamiamon", "Lamortmon", "Lavogaritamon", "Lighdramon", "Lilamon",
-                      "Lilimon", "Lilimon (X-Antibody)", "Loader Leomon", "Locomon", "Loudmon", "Lucemon: Falldown Mode", "Luminamon", "Luminamon (Nene Ver.)", "Lynxmon",
-                      "Mach Gaogamon", "Magnamon", "Maildramon", "Majiramon", "Makuramon", "Mamemon", "Mamemon (X-Antibody)", "Mametyramon", "Mammon", "Mammon (X-Antibody)",
-                      "Maneuvermon", "Manticoremon", "Marin Angemon", "Marin Bullmon", "Marin Chimairamon", "Marin Devimon", "Master Blimpmon", "Master Tyranomon", "Matadrmon",
-                      "Mechanorimon", "Mega Seadramon", "Mega Seadramon (X-Antibody)", "Megadramon", "Megalo Growmon", "Megalo Growmon (Orange)", "Megalo Growmon (X-Antibody)",
-                      "Meicrackmon", "Meicrackmon: Vicious Mode", "Mephismon", "Mephismon (X-Antibody)", "Mermaimon", "Mervamon", "Metal Etemon","Metal Fantomon",
-                      "Metal Garurumon", "Metal Greymon", "Metal Greymon (2010)", "Metal Greymon (Virus)", "Metal Greymon (Virus) (X-Antibody)", "Metal Greymon (X-Antibody)",
-                      "Metal Greymon: \"G\" Erosion Mode", "Metal Greymon: Alterous Mode", "Metal Mamemon", "Metal Mamemon (X-Antibody)", "Metal Seadramon", "Metal Tyranomon",
-                      "Metal Tyranomon (X-Antibody)", "Metallife Kuwagamon", "Mihiramon", "Minotaurmon", "Mistymon", "Mockingbirdmon", "Monarch Lizamon", "Monzaemon",
-                      "Monzaemon (X-Antibody)", "Mummymon", "Murasamemon", "Muso Knightmon","Nanomon (Digimon)", "Negamon (Evolved Form)", "Neo Devimon", "Oblivimon",
-                      "Oboromon", "Okuwamon", "Okuwamon (X-Antibody)", "Oleamon", "Omega Shoutmon", "Omega Shoutmon (X-Antibody)", "Omegamon", "Orochimon", "Owlmon",
-                      "Paildramon", "Pajiramon", "Pandamon", "Panjyamon", "Panjyamon (X-Antibody)", "Parrotmon", "Peacockmon", "Petaldramon", "Phelesmon", "Piccolomon",
-                      "Piemon", "Pinochimon", "Piranimon", "Pistmon", "Polar Bearmon", "Ponchomon", "Prairiemon", "Proganomon", "Pucchiemon", "Pucchiemon (Green)",
-                      "Pumpmon", "Raihimon", "Raiji Ludomon", "Rapidmon Armor", "Rapidmon Perfect", "Raremon", "Rebellimon", "Regulusmon", "Reptilimon", "Rhino Kabuterimon",
-                      "Rhinomon", "Rize Greymon", "Rize Greymon (X-Antibody)", "Rook Chessmon (Black)", "Rook Chessmon (White)", "Rosemon", "Saber Leomon", "Sagittarimon",
-                      "Sagomon", "Sandiramon", "Sanzomon", "Savior Hackmon", "Scorpiomon", "Scourge Chiropmon", "Seahomon", "Sekkamon",
+                      "Garudamon", "Garudamon (X-Antibody)", "Garummon", "Generamon", "Gerbemon", "Ghilliedhumon", "Gigadramon", "Gigasmon", "Giromon", "Gizmon: XT",
+                      "Gogmamon", "Gokuwmon", "Gold V-dramon", "Grademon", "Grademon (Vice)", "Gran Kuwagamon", "Grand Galemon", "Grappu Leomon", "Gravimon", "Great Gryzmon",
+                      "Great King Scumon", "Groundramon", "Gusokumon", "Gyukimon", "Hangyomon", "Helloogarmon", "Herakle Kabuterimon", "Hippogriffomon", "Hisyaryumon",
+                      "Holy Angemon", "Holy Angemon: Priest Mode", "Holydramon", "Hououmon", "Huankunmon", "Imperialdramon: Dragon Mode", "Indaramon", "Infermon", "Insekimon",
+                      "Jazarichmon", "Jet Silphymon", "Jewelbeemon", "Jijimon","Jokermon", "Jyagamon", "Jyureimon", "Kabukimon", "Kaiser Leomon", "Karakurumon", "Karatenmon",
+                      "Kenkimon", "Kenzoku 10th Rank", "Knightmon", "Kongoumon", "Kumbhiramon", "Kyukimon", "Lady Devimon", "Lady Devimon (X-Antibody)", "Lamiamon", "Lamortmon",
+                      "Lavogaritamon", "Lighdramon", "Lilamon", "Lilimon", "Lilimon (X-Antibody)", "Loader Leomon", "Locomon", "Loudmon", "Lucemon: Falldown Mode", "Luminamon",
+                      "Lynxmon", "Mach Gaogamon", "Magnamon", "Maildramon", "Majiramon", "Makuramon", "Mamemon", "Mamemon (X-Antibody)", "Mametyramon", "Mammon",
+                      "Mammon (X-Antibody)", "Maneuvermon", "Manticoremon", "Marin Angemon", "Marin Bullmon", "Marin Chimairamon", "Marin Devimon", "Master Blimpmon",
+                      "Master Tyranomon", "Matadrmon", "Mechanorimon", "Mega Seadramon", "Mega Seadramon (X-Antibody)", "Megadramon", "Megalo Growmon", "Megalo Growmon (Orange)",
+                      "Megalo Growmon (X-Antibody)", "Meicrackmon", "Meicrackmon: Vicious Mode", "Mephismon", "Mephismon (X-Antibody)", "Mermaimon", "Mervamon",
+                      "Metal Etemon","Metal Fantomon", "Metal Garurumon", "Metal Greymon", "Metal Greymon (2010)", "Metal Greymon (Virus)", "Metal Greymon (Virus) (X-Antibody)",
+                      "Metal Greymon (X-Antibody)", "Metal Greymon: \"G\" Erosion Mode", "Metal Greymon: Alterous Mode", "Metal Mamemon", "Metal Mamemon (X-Antibody)",
+                      "Metal Seadramon", "Metal Tyranomon", "Metal Tyranomon (X-Antibody)", "Metallife Kuwagamon", "Mihiramon", "Minotaurmon", "Mistymon", "Mockingbirdmon",
+                      "Monarch Lizamon", "Monzaemon", "Monzaemon (X-Antibody)", "Mummymon", "Murasamemon", "Muso Knightmon","Nanomon (Digimon)", "Negamon (Evolved Form)",
+                      "Neo Devimon", "Oblivimon", "Oboromon", "Okuwamon", "Okuwamon (X-Antibody)", "Oleamon", "Omega Shoutmon", "Omega Shoutmon (X-Antibody)", "Omegamon",
+                      "Orochimon", "Owlmon", "Paildramon", "Pajiramon", "Pandamon", "Panjyamon", "Panjyamon (X-Antibody)", "Parrotmon", "Peacockmon", "Petaldramon",
+                      "Phelesmon", "Piccolomon", "Piemon", "Pinochimon", "Piranimon", "Pistmon", "Polar Bearmon", "Ponchomon", "Prairiemon", "Proganomon", "Pucchiemon",
+                      "Pucchiemon (Green)", "Pumpmon", "Raihimon", "Raiji Ludomon", "Rapidmon Armor", "Rapidmon Perfect", "Raremon", "Rebellimon", "Regulusmon", "Reptilimon",
+                      "Rhino Kabuterimon", "Rhinomon", "Rize Greymon", "Rize Greymon (X-Antibody)", "Rook Chessmon (Black)", "Rook Chessmon (White)", "Rosemon", "Saber Leomon",
+                      "Sagittarimon", "Sagomon", "Sandiramon", "Sanzomon", "Savior Hackmon", "Scorpiomon", "Scourge Chiropmon", "Seahomon", "Sekkamon",
                       "Sephirothmon", "Seraphimon", "Shadramon", "Shakkoumon", "Shakomon", "Sharkmon", "Shawujinmon", "Shishimamon", "Shootmon", "Shoutmon DX",
                       "Shoutmon X3GM", "Shoutmon X3SD", "Shoutmon X4B", "Shoutmon X4K", "Shoutmon X4S", "Shoutmon X5", "Shurimon", "Shutumon", "Silphymon", "Sinduramon",
                       "Sirenmon", "Skull Baluchimon", "Skull Greymon", "Skull Greymon: \"G\" Erosion Mode", "Skull Satamon", "Skull Seadramon", "Soloogarmon", "Splashmon",
@@ -318,16 +357,16 @@ const bancoDatos = {
                       "Were Garurumon (Black)", "Were Garurumon (X-Antibody)","Were Garurumon: Sagittarius Mode", "Whamon Perfect", "Wingdramon", "Wisemon", "Xingtianmon",
                       "Yaeger Dorulumon", "Yatagaramon", "Yatagaramon (2006)", "Yo!Yo!mon", "Zamielmon", "Zanmetsumon", "Zudomon"],
 
-            "Ultimate": [  "Abbadomon", "Abbadomon Core", "Achillesmon", "Aegisdramon", "Agumon -Yuki no Kizuna-", "Aldamon", "Algomon (Ultimate)", "Alphamon",
+            "Ultimate": ["Abbadomon", "Abbadomon Core", "Achillesmon", "Aegisdramon", "Agumon -Yuki no Kizuna-", "Aldamon", "Algomon (Ultimate)", "Alphamon",
             "Alphamon: Ouryuken", "Amaterasumon", "Amphimon", "Ancient Beatmon", "Ancient Garurumon", "Ancient Greymon", "Ancient Irismon", "Ancient Megatheriumon", 
             "Ancient Mermaimon", "Ancient Sphinxmon", "Ancient Troiamon", "Ancient Volcamon", "Ancient Wisemon", "Angewomon", "Anubimon", "Apocalymon", "Apollomon",
             "Apollomon: Whispered", "Arcturusmon", "Ariemon", "Arkadimon Super Ultimate", "Arkadimon Ultimate", "Armagemon", "Armamon", "Armamon: Burst Mode", 
             "Arresterdramon", "Atratusmon", "Avenge Kidmon", "Babamon", "Bacchusmon", "Bagramon", "Baihumon", "Bancho Golemon", "Bancho Leomon", "Bancho Leomon: Burst Mode",
             "Bancho Lilimon", "Bancho Mamemon", "Bancho Stingmon", "Barbamon", "Barbamon (X-Antibody)", "Beel Starmon", "Beel Starmon (X-Antibody)", "Beelzebumon",
-            "Beelzebumon (2010 Anime Version)", "Beelzebumon (X-Antibody)", "Beelzebumon: Blast Mode", "Belial Vamdemon", "Belphemon (X-Antibody)", "Belphemon: Rage Mode",
-            "Belphemon: Sleep Mode", "Beowolfmon", "Berserk Titamon", "Big Mamemon", "Big Ukkomon", "Bio Darkdramon", "Bio Lotusmon", "Bio Spinomon", "Black Guardian",
+            "Beelzebumon (2010)", "Beelzebumon (X-Antibody)", "Beelzebumon: Blast Mode", "Belial Vamdemon", "Belphemon (X-Antibody)", "Belphemon: Rage Mode",
+            "Belphemon: Sleep Mode", "Beowolfmon", "Berserk Titamon", "Big Mamemon", "Big Ukkomon", "Bio Darkdramon", "Bio Lotusmon", "Bio Spinomon",
             "Black King Numemon", "Black Megalo Growmon", "Black Saint Galgomon", "Black Seraphimon", "Black Seraphimon (DW3)", "Black War Greymon",
-            "Black War Greymon (X-Antibody)", "Blastmon", "Blitz Greymon", "Bloom Lordmon", "Blue Guardian", "Bolgmon", "Boltmon", "Breakdramon", "Brigadramon",
+            "Black War Greymon (X-Antibody)", "Blastmon", "Blitz Greymon", "Bloom Lordmon", "Bolgmon", "Boltmon", "Breakdramon", "Brigadramon",
             "Bryweludramon", "Callismon", "Cannondramon", "Cardmon S1", "Cardmon S2", "Cendrillmon", "Ceresmon", "Ceresmon Medium", "Cernumon", "Chaos Dukemon",
             "Chaos Dukemon Core", "Chaos Greymon", "Chaos Lord", "Chaos Piemon", "Chaos Seadramon", "Chaosdramon", "Chaosdramon (X-Antibody)", "Chaosmon",
             "Chaosmon: Valdur Arm", "Cherubimon (Vice)", "Cherubimon (Vice) (X-Antibody)", "Cherubimon (Virtue)", "Cherubimon (Virtue) (X-Antibody)", "Chimairamon",
@@ -365,7 +404,7 @@ const bancoDatos = {
             "Rosemon: Burst Mode", "Rubeusdramon", "Rust Tyranomon", "Ryugumon", "Saber Leomon", "Saint Galgomon", "Sakuyamon", "Sakuyamon (X-Antibody)",
             "Sakuyamon: Miko Mode", "Seiten Gokuwmon", "Seraphimon", "Shagaramon", "Shakamon", "Shin Monzaemon", "Shine Greymon", "Shine Greymon: Burst Mode",
             "Shine Greymon: Ruin Mode", "Shivamon", "Shoutmon DX", "Shoutmon EX6", "Shoutmon X5B", "Shoutmon X5S", "Shoutmon X7", "Shoutmon X7: Superior Mode",
-            "Shroudmon", "Silver Guardian", "Siriusmon", "Skadimon", "Skull Knightmon", "Skull Knightmon: Cavalier Mode", "Skull Mammon", "Skull Mammon (X-Antibody)",
+            "Shroudmon", "Siriusmon", "Skadimon", "Skull Knightmon", "Skull Knightmon: Cavalier Mode", "Skull Mammon", "Skull Mammon (X-Antibody)",
             "Skull Satamon", "Slash Angemon", "Slayerdramon", "Sleipmon", "Sleipmon (X-Antibody)", "Sleipmon: Burst Mode", "Spinomon", "Styracomon",
             "Suijinmon", "Superstarmon", "Surfimon", "Susanoomon", "Tactimon", "Takutoumon", "Takutoumon: Wrath Mode", "Taotiemon", "Taowushou", "Technodramon",
             "Tengumon", "Tiger Vespamon", "Titamon", "Titamon + Skull Baluchimon", "Tlalocmon", "Tonosama Mamemon", "Tyrant Kabuterimon", "Ulforce V-dramon",
@@ -376,13 +415,21 @@ const bancoDatos = {
         },
         
         "reglas": {
+            "Baby I": {
+                "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"],
+                "5": ["Baby"], "6": ["Baby"], "7": ["Baby"], "8": ["Baby"]
+            },
+            "Baby II": {
+                "1": ["Baby"], "2": ["Baby"], "3": ["Baby"], "4": ["Baby"],
+                "5": ["Baby"], "6": ["Baby"], "7": ["Baby"], "8": ["Baby"]
+            },
             "Child": {
                 "1": ["Child"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
                 "5": ["Child", "Adult"], "6": ["Child", "Adult"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Child", "Adult"]
             },
             "Adult": {
                 "1": ["Adult"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
-                "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect",], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"]
+                "5": ["Child", "Adult", "Perfect"], "6": ["Adult", "Perfect"], "7": ["Child", "Adult", "Perfect", "Ultimate"], "8": ["Adult", "Perfect"]
             },
             "Perfect": {
                 "1": ["Perfect"], "2": ["Child", "Adult", "Perfect", "Ultimate" ], "3": ["Child", "Adult", "Perfect", "Ultimate"], "4": ["Child", "Adult", "Perfect", "Ultimate"],
@@ -397,9 +444,8 @@ const bancoDatos = {
 };
 
 const etiquetasVisuales = {
-    "tama": ["Base", "Patrones", "Color patrón", "Extra 1", "Extra 2"], 
-    "baby": ["Etapa", "Base", "Ojos", "Boca", "Cola", "Extremidades", "Piel", "Colores", "Extra"],
-    "digis": ["Etapa", "Base", "Ojos", "Boca", "Cola", "Extremidades", "Piel", "Colores", "Extra"],
+    "digitama": ["Base", "Patrones", "Color patrón", "Extra 1", "Extra 2"], 
+    "digimon": ["Etapa", "Base", "Ojos", "Boca", "Cola", "Extremidades", "Piel", "Colores", "Extra"],
 };
 
 const descripcionesCategorias = {
@@ -410,16 +456,16 @@ const descripcionesCategorias = {
     "Extra 2": "Detalles extras a para que sufras.",
     "Etapa": "Estadio evolutivo.",
     "Ojos": "Forma de los ojos y mirada.",
-    "Boca": "Forma general del hocico.",
-    "Cola": "Rabo, turbina, helice de helicptro apache o lo que toque.",
-    "Extremidades": "Brazos, piernas, patas, alas, tentaculos, ¿Ruedas?",
-    "Piel": "Textura (metalico, con pelaje, escamas, placas, etc).",
+    "Boca": "Forma general de la nariz, hocico y/o mandíbula.",
+    "Cola": "Protuberancia, turbina, cola, hélice o lo que toque.",
+    "Extremidades": "Brazos, piernas, patas, alas, tentáculos, ¿Ruedas?",
+    "Piel": "Textura (metálico, con pelaje, escamas, placas, etc.).",
     "Colores": "Distribución de los colores.",
-    "Extra": "Cuernos, tatuajes, cremayeras, armas, entidades digitales, objetos, accesorios, placas remachadas en la piel, etc..."
+    "Extra": "Ropa, armadura, tatuajes, cremalleras, armas, entidades digitales, objetos, accesorios, placas remachadas en la piel, etc..."
 };
 
-let setActual = "tama";
-let etapaDigis = "Child"; 
+let setActual = "digitama";
+let etapaDigimon = "Child"; 
 
 function inicializarInterfaz() {
     const contenedor = document.getElementById("gridContenedor");
@@ -465,13 +511,13 @@ function actualizarLeyenda(categoria) {
 function cambiarSet(nuevoSet, elementoBoton) {
     setActual = nuevoSet;
     
-    if(setActual === "digis") etapaDigis = "Child"; 
+    if(setActual === "digimon") etapaDigimon = "Child"; 
     
     const botones = document.querySelectorAll('.btn-set');
     botones.forEach(btn => btn.classList.remove('active'));
     elementoBoton.classList.add('active');
     
-    document.getElementById("leyendaCategoria").innerText = "Selecciona una categoría para ver su descripción";
+    document.getElementById("leyendaCategoria").innerText = "Selecciona una categoría por vez";
     
     inicializarInterfaz();
 }
@@ -480,13 +526,11 @@ function generarEspecifico(indice) {
     let opcionesDisponibles = [];
     const visor = document.getElementById(`visor-${indice}`);
     
-    // Motor de búsqueda y concatenación optimizado
-    if (setActual === "digis" && indice !== "0") {
-        const etapasRequeridas = bancoDatos["digis"]["reglas"][etapaDigis][indice];
+    if (setActual === "digimon" && indice !== "0") {
+        const etapasRequeridas = bancoDatos["digimon"]["reglas"][etapaDigimon][indice];
         
-        // Recorremos las reglas y unimos los arrays correspondientes directamente de la raíz de la etapa
         etapasRequeridas.forEach(etapaRef => {
-            const poolEspecifico = bancoDatos["digis"]["listasMaestras"][etapaRef];
+            const poolEspecifico = bancoDatos["digimon"]["listasMaestras"][etapaRef];
             if (poolEspecifico) {
                 opcionesDisponibles = opcionesDisponibles.concat(poolEspecifico);
             }
@@ -501,13 +545,13 @@ function generarEspecifico(indice) {
         visor.classList.add("nuevo");
         visor.style.color = ""; 
         
-        if (setActual === "digis" && indice === "0") {
-            etapaDigis = eleccion;
+        if (setActual === "digimon" && indice === "0") {
+            etapaDigimon = eleccion;
             
-            for (let j = 1; j < etiquetasVisuales["digis"].length; j++) {
+            for (let j = 1; j < etiquetasVisuales["digimon"].length; j++) {
                 const otroVisor = document.getElementById(`visor-${j}`);
                 if (otroVisor) {
-                    otroVisor.innerText = `Re-tirar para ${etapaDigis}`;
+                    otroVisor.innerText = `Re-tirar para ${etapaDigimon}`;
                     otroVisor.classList.remove("nuevo");
                     otroVisor.style.color = "#ff452b"; 
                 }
