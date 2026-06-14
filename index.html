@@ -170,14 +170,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         .info-text {
-            font-size: clamp(10px, 3vw, 14px);
+            font-size: clamp(10px, 3vw, 12px);
             font-weight: bold;
             color: #ffffff;
             margin-bottom: 12px;
             min-height: 24px;
         }
         .social-links {
-            font-size: clamp(8px, 2.5vw, 12px);
+            font-size: clamp(8px, 2.5vw, 14px);
             color: #a0aec0;
         }
         .social-links a {
@@ -498,7 +498,7 @@ const descripcionesCategorias = {
     "Extremidades": "Brazos, piernas, patas, alas, tentáculos, ¿Ruedas?",
     "Piel": "Textura (metálico, con pelaje, escamas, placas, etc.).",
     "Colores": "Distribución de los colores.",
-    "Extra": "Ropa, armadura, tatuajes, cremalleras, armas, entidades digitales, objetos, accesorios, placas remachadas en la piel, etc..."
+    "Extra": "Ropa, armadura, marcas y/o incrustaciones en piel, etc..."
 };
 
 let setActual = "digitama";
@@ -557,7 +557,7 @@ function inicializarInterfaz() {
             const btnGoogle = document.createElement("button");
             btnGoogle.className = "boton-google";
             btnGoogle.id = `btngoogle-${i}`;
-            btnGoogle.innerText = "📚";
+            btnGoogle.innerText = "🔎";
             btnGoogle.title = "Buscar en Google Imágenes";
             btnGoogle.onclick = () => {
                 const textoBusqueda = visor.innerText;
@@ -572,7 +572,7 @@ function inicializarInterfaz() {
             const btnBuscar = document.createElement("button");
             btnBuscar.className = "boton-buscar";
             btnBuscar.id = `btnbuscar-${i}`;
-            btnBuscar.innerText = "🔎";
+            btnBuscar.innerText = "📚";
             btnBuscar.title = "Buscar en Wikimon";
             btnBuscar.onclick = () => {
                 const textoBusqueda = visor.innerText;
@@ -587,7 +587,7 @@ function inicializarInterfaz() {
             espaciadorGoogle.className = "boton-google";
             espaciadorGoogle.style.visibility = "hidden";
             espaciadorGoogle.style.display = "inline-block";
-            espaciadorGoogle.innerText = "🔎";
+            espaciadorGoogle.innerText = "📚";
             espaciadorGoogle.disabled = true;
             fila.appendChild(espaciadorGoogle);
 
@@ -595,7 +595,7 @@ function inicializarInterfaz() {
             espaciador.className = "boton-buscar";
             espaciador.style.visibility = "hidden";
             espaciador.style.display = "inline-block";
-            espaciador.innerText = "📚";
+            espaciador.innerText = "🔎";
             espaciador.disabled = true;
             fila.appendChild(espaciador);
         }
